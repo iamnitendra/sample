@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+using namespace std;
+void addedege(vector<int>adj[],int u,int v){
+    adj[u].push_back(v);
+    //adj[v].push_back(u);
+}
+bool dfsrec(vector<int>adj[],int s,bool visited[],bool resstack[]){
+    visited[s]=true;
+    resstack[s]=true;
+    for(int u : adj[s]){
+        if(visited[u]==false && dfsrec(adj,u,visited,resstack)){
+            return true;
+        }
+        else if(resstack[u]==true){
+            return true;
+        }
+    }
+    resstack[s]=false;
+    return false;
+}
+bool dfs(vector<int> adj[],int v){
+    bool visited[v];
+    bool resstack[v];
+    for(int i=0;i<v;i++){
+        visited[i]=false;
+        resstack[i]=false;
+    }
+    for(int i=0;i<v;i++){
+        if(visited[i]==false){
+            if(dfsrec(adj,i,visited,resstack)==true){
+                return true;
+            }
+        }
+    }
+    return false;
+}
+int main()
+{
+    int v = 4;
+    std::vector<int >adj[v] ;
+    addedege(adj,0,1);
+    addedege(adj,1,2);
+    // addedege(adj,2,0);
+    // addedege(adj,3,4);
+    bool res = dfs(adj,v);
+    if(res){
+        cout<<"YES cycle detected ";
+    }
+    else
+    {
+        cout<<"NO cycle";
+    }
+
+    return 0;
+}
